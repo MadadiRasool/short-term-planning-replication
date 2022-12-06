@@ -84,3 +84,21 @@ os.chmod(path, mode)
 import subprocess
 
 output = subprocess.call("./estimation.sh")
+
+
+# import sys
+
+# output = subprocess.call(["C:\cygwin64\bin\mintty.exe","./estimation.sh"])
+# output = subprocess.call("/estimation.sh", shell=True)
+
+# from pathlib import Path
+# f_path = Path(__file__)
+# s_path = os.path.join(f_path.parent.parent, 'estimation.sh')
+# output = subprocess.run(["bash", "-c", "ls /usr/bin | grep pycode"])
+# output = subprocess.run(["bash",s_path] , shell=True, check=True)
+# output = subprocess.run(["C:\cygwin64\bin\mintty.exe",s_path] , shell=True, check=True)
+# print(output)
+
+
+# output = subprocess.call("/test.txt", shell=True)
+# output = subprocess.call([sys.executable, './estimation.sh'])
