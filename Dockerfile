@@ -16,10 +16,18 @@ LABEL version="1.0"
 LABEL maintainer="rm <<madadi.rasool@yahoo.com>>"
 
 # Create the environment:
-COPY env.yaml .
-RUN conda env create -f env.yaml
+# COPY env.yaml .
+# RUN conda env create -f env.yaml
 
 COPY . /app
+
+# Create the environment:
+RUN conda env create -f /app/env.yaml
+
+# Activate Conda environment
+ENV PATH /opt/conda/envs/short-term-planning-replication/bin:$PATH
+RUN /bin/bash -c "source activate short-term-planning-replication"
+
 
 # Creates a non-root user with an explicit UID and adds permission to access the /app folder
 # For more info, please refer to https://aka.ms/vscode-docker-python-configure-containers
