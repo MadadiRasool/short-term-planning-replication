@@ -7,6 +7,15 @@ ENV PYTHONDONTWRITEBYTECODE=1
 # Turns off buffering for easier container logging
 ENV PYTHONUNBUFFERED=1
 
+# Install  necessary tools
+RUN apt-get update && apt-get install -y \
+    make \
+    gcc \
+    mpich \ 
+    && rm -rf /var/lib/apt/lists/*
+
+  
+
 # Install pip requirements
 # COPY requirements.txt .
 # RUN python -m pip install -r requirements.txt
@@ -21,6 +30,9 @@ LABEL maintainer="rm <<madadi.rasool@yahoo.com>>"
 
 COPY . /app
 
+# make entrypoint script executable
+# RUN chmod u+x /app/entrypoint.sh
+
 # Create the environment:
 RUN conda env create -f /app/env.yaml
 
@@ -33,6 +45,10 @@ RUN /bin/bash -c "source activate short-term-planning-replication"
 # For more info, please refer to https://aka.ms/vscode-docker-python-configure-containers
 RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /app
 USER appuser
+
+VOLUME /data /app/data
+VOLUME ./fortran /app/fortran
+# VOLUME . /app
 
 # During debugging, this entry point will be overridden. For more information, please refer to https://aka.ms/vscode-docker-python-debug
 CMD ["/app/entrypoint.sh"]
