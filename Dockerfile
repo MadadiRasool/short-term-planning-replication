@@ -12,13 +12,19 @@ RUN apt-get update && apt-get install -y \
     make \
     gcc \
     mpich \ 
+    git \
     && rm -rf /var/lib/apt/lists/*
+
+
+
 
   
 
 # Install pip requirements
 # COPY requirements.txt .
 # RUN python -m pip install -r requirements.txt
+
+
 
 WORKDIR /app
 LABEL version="1.0"
@@ -39,6 +45,13 @@ RUN conda env create -f /app/env.yaml
 # Activate Conda environment
 ENV PATH /opt/conda/envs/short-term-planning-replication/bin:$PATH
 RUN /bin/bash -c "source activate short-term-planning-replication"
+
+# RUN apt-get add --no-cache git
+# RUN apt-get add --no-cache openssh
+RUN mkdir -p /usr/src/other_packages
+
+RUN git clone https://github.com/eph/fortress.git /usr/src/other_packages/fortress
+RUN pip install -e /usr/src/other_packages/fortress
 
 
 # Creates a non-root user with an explicit UID and adds permission to access the /app folder
