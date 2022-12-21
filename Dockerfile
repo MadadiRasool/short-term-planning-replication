@@ -8,7 +8,7 @@ ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
 # Install  necessary tools
-RUN apt-get update && apt-get install -y \
+RUN apt-get --allow-releaseinfo-change update && apt-get install -y \
     make \
     gcc \
     mpich \ 
@@ -17,6 +17,8 @@ RUN apt-get update && apt-get install -y \
 
 
 
+RUN conda update conda
+RUN conda install conda-build
 
   
 
@@ -46,11 +48,14 @@ RUN conda env create -f /app/env.yaml
 ENV PATH /opt/conda/envs/short-term-planning-replication/bin:$PATH
 RUN /bin/bash -c "source activate short-term-planning-replication"
 
+
 # RUN apt-get add --no-cache git
 # RUN apt-get add --no-cache openssh
 RUN mkdir -p /usr/src/other_packages
 
 RUN git clone https://github.com/eph/fortress.git /usr/src/other_packages/fortress
+# RUN conda build /usr/src/other_packages/fortress/conda
+# RUN conda develop /usr/src/other_packages/fortress
 RUN pip install -e /usr/src/other_packages/fortress
 
 
