@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 python --version
 # python run.py
 echo -e 'Start Get Date'

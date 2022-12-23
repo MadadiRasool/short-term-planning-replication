@@ -58,6 +58,9 @@ RUN git clone https://github.com/eph/fortress.git /usr/src/other_packages/fortre
 # RUN conda develop /usr/src/other_packages/fortress
 RUN pip install -e /usr/src/other_packages/fortress
 
+RUN echo "Make sure fortress is installed:"
+RUN python -c "import fortress"
+
 
 # Creates a non-root user with an explicit UID and adds permission to access the /app folder
 # For more info, please refer to https://aka.ms/vscode-docker-python-configure-containers
@@ -69,5 +72,6 @@ VOLUME ./fortran /app/fortran
 # VOLUME . /app
 
 # During debugging, this entry point will be overridden. For more information, please refer to https://aka.ms/vscode-docker-python-debug
-CMD ["/app/entrypoint.sh"]
+ENTRYPOINT ["/app/entrypoint.sh"]
+CMD ["bash"]
 # ENTRYPOINT ["conda", "run", "--no-capture-output", "-n", "short-term-planning-replication", "python", "run.py"]
