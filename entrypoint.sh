@@ -1,5 +1,7 @@
-#!/bin/sh
+#!/bin/bash
 python --version
+
+conda info
 # python run.py
 echo -e 'Start Get Date'
 python scripts/01-construct-estimation-data.py

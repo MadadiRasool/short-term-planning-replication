@@ -44,22 +44,19 @@ COPY . /app
 # Create the environment:
 RUN conda env create -f /app/env.yaml
 
+# https://stackoverflow.com/questions/37945759/condas-source-activate-virtualenv-does-not-work-within-dockerfile
 # Activate Conda environment
 ENV PATH /opt/conda/envs/short-term-planning-replication/bin:$PATH
 RUN /bin/bash -c "source activate short-term-planning-replication"
 
 
-# RUN apt-get add --no-cache git
-# RUN apt-get add --no-cache openssh
-RUN mkdir -p /usr/src/other_packages
-
-RUN git clone https://github.com/eph/fortress.git /usr/src/other_packages/fortress
+# RUN mkdir -p /usr/src/other_packages
+# RUN git clone https://github.com/eph/fortress.git /usr/src/other_packages/fortress
 # RUN conda build /usr/src/other_packages/fortress/conda
 # RUN conda develop /usr/src/other_packages/fortress
-RUN pip install -e /usr/src/other_packages/fortress
-
-RUN echo "Make sure fortress is installed:"
-RUN python -c "import fortress"
+# RUN pip install -e /usr/src/other_packages/fortress
+# RUN echo "Make sure fortress is installed:"
+# RUN python -c "import fortress"
 
 
 # Creates a non-root user with an explicit UID and adds permission to access the /app folder
