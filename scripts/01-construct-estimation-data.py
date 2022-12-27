@@ -1,5 +1,10 @@
 import numpy as np
 from pandas_datareader import get_data_fred
+import sys
+import os
+print(sys.version)
+print(os.environ['CONDA_PREFIX'])
+
 
 
 fred = ["GDPC1", "GDPDEF", "CNP16OV",
