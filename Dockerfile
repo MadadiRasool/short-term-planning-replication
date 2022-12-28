@@ -1,6 +1,10 @@
 # For more information, please refer to https://aka.ms/vscode-docker-python
 FROM continuumio/miniconda3
 
+
+# Put conda in path so we can use conda activate
+ENV PATH=$CONDA_DIR/bin:$PATH
+
 # Keeps Python from generating .pyc files in the container
 ENV PYTHONDONTWRITEBYTECODE=1
 
@@ -13,12 +17,25 @@ RUN apt-get --allow-releaseinfo-change update && apt-get install -y \
     gcc \
     mpich \ 
     git \
+    # build-essentials \
+    wget \
+    # clean \
     && rm -rf /var/lib/apt/lists/*
 
+# https://fabiorosado.dev/blog/install-conda-in-docker/
+# Install miniconda
+
+#     RUN wget \
+#     https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh \
+#     && mkdir /root/.conda \
+#     && bash Miniconda3-latest-Linux-x86_64.sh -b \
+#     && rm -f Miniconda3-latest-Linux-x86_64.sh 
+# RUN conda --version
 
 
-RUN conda update conda
-RUN conda install conda-build
+
+# RUN conda update conda
+# RUN conda install conda-build
 
   
 
@@ -44,10 +61,14 @@ COPY . /app
 # Create the environment:
 RUN conda env create -f /app/env.yaml
 
+# Make RUN commands use the new environment:
+RUN echo "conda activate short-term-planning-replication" >> ~/.bashrc
+SHELL ["/bin/bash", "--login", "-c"]
+
 # https://stackoverflow.com/questions/37945759/condas-source-activate-virtualenv-does-not-work-within-dockerfile
 # Activate Conda environment
-ENV PATH /opt/conda/envs/short-term-planning-replication/bin:$PATH
-RUN /bin/bash -c "source activate short-term-planning-replication"
+# ENV PATH /opt/conda/envs/short-term-planning-replication/bin:$PATH
+# RUN /bin/bash -c "source activate short-term-planning-replication"
 
 
 # RUN mkdir -p /usr/src/other_packages
@@ -61,14 +82,14 @@ RUN /bin/bash -c "source activate short-term-planning-replication"
 
 # Creates a non-root user with an explicit UID and adds permission to access the /app folder
 # For more info, please refer to https://aka.ms/vscode-docker-python-configure-containers
-RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /app
-USER appuser
+# RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /app
+# USER appuser
 
 VOLUME /data /app/data
-VOLUME ./fortran /app/fortran
+VOLUME /fortran /app/fortran
 # VOLUME . /app
 
 # During debugging, this entry point will be overridden. For more information, please refer to https://aka.ms/vscode-docker-python-debug
 ENTRYPOINT ["/app/entrypoint.sh"]
-CMD ["bash"]
+# CMD ["bash"]
 # ENTRYPOINT ["conda", "run", "--no-capture-output", "-n", "short-term-planning-replication", "python", "run.py"]
