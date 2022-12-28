@@ -1,5 +1,6 @@
 # For more information, please refer to https://aka.ms/vscode-docker-python
-FROM continuumio/miniconda3
+# FROM continuumio/miniconda3
+FROM devcafe/ubuntu18.04-gcc7.3.0-openmpi2.1.0
 
 
 # Put conda in path so we can use conda activate
@@ -10,6 +11,8 @@ ENV PYTHONDONTWRITEBYTECODE=1
 
 # Turns off buffering for easier container logging
 ENV PYTHONUNBUFFERED=1
+
+RUN apt-get update
 
 # Install  necessary tools
 RUN apt-get --allow-releaseinfo-change update && apt-get install -y \
@@ -22,20 +25,28 @@ RUN apt-get --allow-releaseinfo-change update && apt-get install -y \
     # clean \
     && rm -rf /var/lib/apt/lists/*
 
+
 # https://fabiorosado.dev/blog/install-conda-in-docker/
 # Install miniconda
 
-#     RUN wget \
-#     https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh \
-#     && mkdir /root/.conda \
-#     && bash Miniconda3-latest-Linux-x86_64.sh -b \
-#     && rm -f Miniconda3-latest-Linux-x86_64.sh 
-# RUN conda --version
+    ENV PATH="/root/miniconda3/bin:${PATH}"
+    ARG PATH="/root/miniconda3/bin:${PATH}"
+
+    RUN wget \
+    https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh \
+    && mkdir /root/.conda \
+    && bash Miniconda3-latest-Linux-x86_64.sh -b \
+    && rm -f Miniconda3-latest-Linux-x86_64.sh 
+RUN conda --version
 
 
 
-# RUN conda update conda
-# RUN conda install conda-build
+
+
+
+
+RUN conda update conda
+RUN conda install conda-build
 
   
 
