@@ -20,6 +20,11 @@ RUN apt-get --allow-releaseinfo-change update && apt-get install -y \
     # build-essentials \
     wget \
     # clean \
+    texlive-latex-base \
+    texlive-latex-recommended \
+    texlive-fonts-recommended \
+    texlive-latex-extra \
+    texlive-bibtex-extra \
     && rm -rf /var/lib/apt/lists/*
 
 # https://fabiorosado.dev/blog/install-conda-in-docker/
