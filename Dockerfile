@@ -25,6 +25,8 @@ RUN apt-get --allow-releaseinfo-change update && apt-get install -y \
     texlive-fonts-recommended \
     texlive-latex-extra \
     texlive-bibtex-extra \
+    cm-super \
+    fonts-firacode \
     && rm -rf /var/lib/apt/lists/*
 
 # https://fabiorosado.dev/blog/install-conda-in-docker/
