@@ -2,6 +2,7 @@ from models import (
     canonical_NK,
     trends,
     finite_horizon,
+    finite_horizon_ir,
     finite_horizon_gamma,
     finite_horizon_phibar,
     angeletos_lian,
@@ -12,14 +13,16 @@ from models import (
 
 
 for model in [
-    canonical_NK,
-    trends,
-    finite_horizon,
-    finite_horizon_gamma,
-    finite_horizon_phibar,
-    angeletos_lian,
-    habits,
-    habits_lampi,
+    finite_horizon_ir,
+    # canonical_NK,
+    # trends,
+    # finite_horizon,
+    
+    # finite_horizon_gamma,
+    # finite_horizon_phibar,
+    # angeletos_lian,
+    # habits,
+    # habits_lampi,
 ]:
    model.load()
    model.create_fortran_model()

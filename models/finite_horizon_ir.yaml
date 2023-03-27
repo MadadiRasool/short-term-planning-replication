@@ -1,0 +1,99 @@
+declarations:
+  name: 'finite_horizon_ir'
+  variables: [x, ppi, i, Mo,m, xbar, pibar, mbar,Mobar, v, vtilde, u,s,e]
+  parameters: [rho, kappa, beta, sigma, alpha, phipi, phix, b, sigu, sigs, sige, rhou, rhos, rhoe, gamma, gammatilde, phipiLR, phixLR]
+  observables: [xhat, pihat, Mohat]
+  shocks: [epsu, epss, epse]
+
+equations:
+  model:
+  # Euler Equation
+  - x - u - xbar = rho*(x(+1) - u(+1) - xbar(+1)) - (1/sigma)*(i - ibar - rho*(ppi(+1) - pibar(+1)))
+
+  # Phillips Curve
+  - ppi - pibar = beta*rho*(pi(+1) - pibar(+1)) + kappa*(x - s - xbar)
+
+  # demand for money
+  - m = (1/sigma)*x - (1/b)*i
+
+  # money growth rate
+  - Mo = m - m(-1) + ppi
+
+  # Monetary Policy
+  - Mo - Mobar = phipi*(ppi - pibar) + phix*(x - xbar)+e
+
+  # Value functions
+  - v = (1.0-gamma)*v(-1) + gamma*(x(-1) - s(-1) + sigma*ppi(-1))
+  - vtilde = (1- gammatilde) *vtilde(-1) + gammatilde * ppi(-1) / (1 - alpha)
+
+  # Latent States
+  - xbar = rho*xbar - (1/sigma)*(ibar - rho*pibar) + (1 - rho)*v
+  - pibar =beta*rho*pibar + kappa*xbar + (1-alpha)*beta*(1 - rho)*vtilde
+  - mbar = (1/sigma)*x - (1/b)*i
+  - Mobar = mbar + pibar
+  - Mobar = phipiLR*pibar + phixLR*xbar
+
+  - u = rhou*u(-1) + epsu
+  - e= rhoe*e(-1) + epse
+  - s = rhos*s(-1) + epss
+
+  observables: 
+    xhat,
+    pihat,
+    Mohat,
+
+calibration:
+  parameters:
+    sigma: 1.52
+    b: 2.39
+    beta: 0.96
+    kappa: 0.124
+    alpha: 0.19
+    rho: 1.0
+    phipi: -1.24
+    phix: -2.23
+    gamma: 0.1
+    gammatilde: 0.1
+    sigu: 0.01
+    sigs: 0.01
+    sige: 0.01
+    rhou: 0.8
+    rhos: 1.8
+    rhoe: 0.78
+    phipiLR: -1.24
+    phixLR: -2.23
+
+
+  covariances:
+    epsu: sigu^2
+    epse: sige^2
+    epss: sigs^2
+
+estimation:
+  data:
+    file: 'data/longsample_ir.txt'
+    start: 1357Q1
+
+
+  prior:
+    alpha: [beta, 0.2, 0.02]
+    sigma: [gamma, 1.5, 0.05]
+    rho: [uniform, 0, 1]
+    beta: [beta, 0.96, 0.05]
+    b: [gamma, 1.4, 0.05]
+    gamma: [uniform, 0, 1]
+    gammatilde: [uniform, 0, 1] 
+    kappa: [gamma, 0.12, 0.07]
+    phipi: [normal, -1.24, 0.1]
+    phix: [normal, -2.23, 0.1]
+    sigu: [inv_gamma, 0.01, inf]
+    sige: [inv_gamma, 0.01, inf]
+    sigs: [inv_gamma, 0.01, inf]
+    rhou: [beta, 0.8, 0.05]
+    rhos: [normal, 0.8, 0.05]
+    rhoe: [beta, 0.78, 0.05]
+    phipiLR: [normal, -1.24, 0.25]
+    phixLR: [normal, -2.23, 0.25]
+
+
+

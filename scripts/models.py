@@ -126,6 +126,18 @@ finite_horizon = ModelAttributes(
     },
 )
 
+finite_horizon_ir = ModelAttributes(
+    name="FH_IR",
+    yaml_file="models/finite_horizon_ir.yaml",
+    fortran_directory="fortran/finite_horizon_ir",
+    fixed_parameters={
+        # "gammatilde": "gamma",
+        # "phipiLR": "phipi",
+        # "phiyLR": "phiy",
+        # "alpha": 0.75,
+    },
+)
+
 
 finite_horizon = ModelAttributes(
     name="FHP-baseline",
