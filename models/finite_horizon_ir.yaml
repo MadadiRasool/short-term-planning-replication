@@ -11,10 +11,10 @@ equations:
   - x - u - xbar = rho*(x(+1) - u(+1) - xbar(+1)) - (1/sigma)*(i - ibar - rho*(ppi(+1) - pibar(+1)))
 
   # Phillips Curve
-  - ppi - pibar = beta*rho*(pi(+1) - pibar(+1)) + kappa*(x - s - xbar)
+  - ppi - pibar = beta*rho*(ppi(+1) - pibar(+1)) + kappa*(x - s - xbar)
 
   # demand for money
-  - m = (1/sigma)*x - (1/b)*i
+  - m = (sigma/b)*xbar - (1/b)*i
 
   # money growth rate
   - Mo = m - m(-1) + ppi
@@ -23,13 +23,13 @@ equations:
   - Mo - Mobar = phipi*(ppi - pibar) + phix*(x - xbar)+e
 
   # Value functions
-  - v = (1.0-gamma)*v(-1) + gamma*(x(-1) - s(-1) + sigma*ppi(-1))
+  - v = (1.0-gamma)*v(-1) + gamma*(x(-1) + (1/6)*ppi(-1))
   - vtilde = (1- gammatilde) *vtilde(-1) + gammatilde * ppi(-1) / (1 - alpha)
 
   # Latent States
   - xbar = rho*xbar - (1/sigma)*(ibar - rho*pibar) + (1 - rho)*v
   - pibar =beta*rho*pibar + kappa*xbar + (1-alpha)*beta*(1 - rho)*vtilde
-  - mbar = (1/sigma)*x - (1/b)*i
+  - mbar = (sigma/b)*xbar - (1/b)*ibar
   - Mobar = mbar + pibar
   - Mobar = phipiLR*pibar + phixLR*xbar
 
