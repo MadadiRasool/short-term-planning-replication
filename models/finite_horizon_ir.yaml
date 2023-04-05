@@ -1,46 +1,46 @@
 declarations:
   name: 'finite_horizon_ir'
-  variables: [x, ppi, i, Mo,m, xbar, pibar, mbar,Mobar, v, vtilde, u,s,e]
+  variables: [x, ppi, i, Mo,m, xbar, pibar, mbar,Mobar, v, vtilde, u , s, e, ibar, hx, hMo, hppi]
   parameters: [rho, kappa, beta, sigma, alpha, phipi, phix, b, sigu, sigs, sige, rhou, rhos, rhoe, gamma, gammatilde, phipiLR, phixLR]
   observables: [xhat, pihat, Mohat]
-  shocks: [epsu, epss, epse]
+  shocks: [epsu, epss, epse,]
 
 equations:
   model:
-  # Euler Equation
-  - x - u - xbar = rho*(x(+1) - u(+1) - xbar(+1)) - (1/sigma)*(i - ibar - rho*(ppi(+1) - pibar(+1)))
+   # Euler Equation
+   - x - u - xbar = rho*(x(+1) - u(+1) - xbar(+1)) - (1/sigma)*(i - ibar - rho*(ppi(+1) - pibar(+1)))
 
-  # Phillips Curve
-  - ppi - pibar = beta*rho*(ppi(+1) - pibar(+1)) + kappa*(x - s - xbar)
+   # Phillips Curve
+   - ppi - pibar = beta*rho*(ppi(+1) - pibar(+1)) + kappa*(x - s - xbar)
 
-  # demand for money
-  - m = (sigma/b)*xbar - (1/b)*i
+   # demand for money
+   - m = (sigma/b)*xbar - (1/b)*i
 
-  # money growth rate
-  - Mo = m - m(-1) + ppi
+   # money growth rate
+   - Mo = m - m(-1) + ppi
 
-  # Monetary Policy
-  - Mo - Mobar = phipi*(ppi - pibar) + phix*(x - xbar)+e
+   # Monetary Policy
+   - Mo - Mobar = phipi*(ppi - pibar) + phix*(x - xbar)+e
 
-  # Value functions
-  - v = (1.0-gamma)*v(-1) + gamma*(x(-1) + (1/6)*ppi(-1))
-  - vtilde = (1- gammatilde) *vtilde(-1) + gammatilde * ppi(-1) / (1 - alpha)
+   # Value functions
+   - v = (1.0-gamma)*v(-1) + gamma*(x(-1) + (1/6)*ppi(-1))
+   - vtilde = (1- gammatilde) *vtilde(-1) + gammatilde * ppi(-1) / (1 - alpha)
 
-  # Latent States
-  - xbar = rho*xbar - (1/sigma)*(ibar - rho*pibar) + (1 - rho)*v
-  - pibar =beta*rho*pibar + kappa*xbar + (1-alpha)*beta*(1 - rho)*vtilde
-  - mbar = (sigma/b)*xbar - (1/b)*ibar
-  - Mobar = mbar + pibar
-  - Mobar = phipiLR*pibar + phixLR*xbar
+   # Latent States
+   - xbar = rho*xbar - (1/sigma)*(ibar - rho*pibar) + (1 - rho)*v
+   - pibar = beta*rho*pibar + kappa*xbar + (1-alpha)*beta*(1 - rho)*vtilde
+   - mbar = (sigma/b)*xbar - (1/b)*ibar
+   - Mobar = mbar + pibar
+   - Mobar = phipiLR*pibar + phixLR*xbar
 
-  - u = rhou*u(-1) + epsu
-  - e= rhoe*e(-1) + epse
-  - s = rhos*s(-1) + epss
+   - u = rhou*u(-1) + epsu
+   - e = rhoe*e(-1) + epse
+   - s = rhos*s(-1) + epss
 
-  observables: 
-    xhat,
-    pihat,
-    Mohat,
+  # observables: 
+  #   xhat: x-hx
+  #   pihat: ppi-hppi
+  #   Mohat: Mo-hMo
 
 calibration:
   parameters:
