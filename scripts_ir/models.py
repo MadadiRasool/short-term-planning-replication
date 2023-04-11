@@ -131,10 +131,10 @@ finite_horizon_ir = ModelAttributes(
     yaml_file="models/finite_horizon_ir.yaml",
     fortran_directory="fortran/finite_horizon_ir",
     fixed_parameters={
-        # "gammatilde": "gamma",
-        # "phipiLR": "phipi",
-        # "phiyLR": "phiy",
-        # "alpha": 0.75,
+        "gammatilde": "gamma",
+        "phipiLR": "phipi",
+        "phixLR": "phix",
+        "alpha": 0.19,
     },
 )
 

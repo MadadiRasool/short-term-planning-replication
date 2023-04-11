@@ -29,6 +29,6 @@ for model in [
 
 
 # now the single agent models
-for model in single_agent_models:
-    model.load()
-    model.create_fortran_model()
+# for model in single_agent_models:
+#     model.load()
+#     model.create_fortran_model()

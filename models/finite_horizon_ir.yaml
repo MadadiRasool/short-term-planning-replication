@@ -76,7 +76,7 @@ estimation:
 
 
   prior:
-    alpha: [beta, 0.2, 0.02]
+    alpha: [beta, 0.4, 0.02]
     sigma: [gamma, 1.5, 0.05]
     rho: [uniform, 0, 1]
     beta: [beta, 0.96, 0.05]
@@ -92,8 +92,8 @@ estimation:
     rhou: [beta, 0.8, 0.05]
     rhos: [normal, 0.8, 0.05]
     rhoe: [beta, 0.78, 0.05]
-    phipiLR: [normal, -1.24, 0.25]
-    phixLR: [normal, -2.23, 0.25]
+    phipiLR: [normal, -1.24, 0.1]
+    phixLR: [normal, -2.23, 0.1]
 
 
 

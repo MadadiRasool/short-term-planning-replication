@@ -19,17 +19,17 @@ python --version
 
 
 
-echo -e 'Start Get Date'
-python scripts/01-construct-estimation-data.py
-echo -e 'End Get Date'
+# echo -e 'Start Get Date'
+# python scripts/01-construct-estimation-data.py
+# echo -e 'End Get Date'
 
 echo -e 'Start Create Fortran Models'
-python scripts/02-construct-fortran-models.py
+python scripts_ir/02-construct-fortran-models.py
 echo -e 'End Create Fortran Models'
 
-# echo -e 'Start Estimate BaseLine Models'
-# python scripts/03-estimate-baseline-models.py --model canonical_NK --nprocs 4
-# echo -e 'End Estimate BaseLine Models'
+echo -e 'Start Estimate BaseLine Models'
+python scripts_ir/03-estimate-baseline-models.py --model finite_horizon_ir --nprocs 4
+echo -e 'End Estimate BaseLine Models'
 
 # echo -e 'Start Create Tables'
 # python scripts/05-fig-impulse-response-disinflation-shock.py           
