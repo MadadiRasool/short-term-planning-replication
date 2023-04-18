@@ -133,8 +133,8 @@ finite_horizon_ir = ModelAttributes(
     fixed_parameters={
         "gammatilde": "gamma",
         "phipiLR": "phipi",
-        "phixLR": "phix",
-        "alpha": 0.19,
+        "phiyLR": "phiy",
+        "alpha": 0.2,
     },
 )
 
