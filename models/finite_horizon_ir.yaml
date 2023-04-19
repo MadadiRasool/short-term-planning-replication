@@ -2,27 +2,27 @@ declarations:
   name: "finite_horizon_ir"
   variables:
     [
-      y,
-      ppi,
+      yhat,
+      pihat,
       i,
-      Mo,
+      Mohat,
       m,
-      ybar,
+      yhatbar,
       ibar,
-      pibar,
+      pihatbar,
       mbar,
-      Mobar,
+      Mohatbar,
       v,
       vtilde,
-      ylag,
+      # ylag,
       xi,
       ystar,
       Mostar,
     ]
   parameters:
     [
-      piA,
-      yQ,
+      # piA,
+      # yQ,
       rho,
       kappa,
       beta,
@@ -43,56 +43,57 @@ declarations:
       phiyLR,
     ]
   observables: [ygr, infl, int]
-  # observables: [yhat, ppihat, Mohat]
+  # observables: [yhat, pihat, Mohat]
   shocks: [epsxi, epsy, epsMo]
 
 equations:
   model:
     # Euler Equation
-    - y - xi - ybar = rho*(y(+1) - xi(+1) - ybar(+1)) - (1/sigma)*(i - ibar - rho*(ppi (+1) - pibar(+1)))
+    - yhat - xi - yhatbar = rho*(yhat(+1) - xi(+1) - yhatbar(+1)) - (1/sigma)*(i - ibar - rho*(pihat (+1) - pihatbar(+1)))
 
     # Phillips Curve
-    - ppi - pibar =beta*rho*(ppi(+1) - pibar(+1)) + kappa*(y - ystar - ybar)
+    - pihat - pihatbar =beta*rho*(pihat(+1) - pihatbar(+1)) + kappa*(yhat - ystar - yhatbar)
 
     # demand for money
-    - m = (sigma/b) * y - (1/b) * i
+    - m = (sigma/b) * yhat - (1/b) * i
 
     # money growth rate
-    - Mo = m - m(-1) + ppi
+    - Mohat = m - m(-1) + pihat
 
     # Monetary Policy
-    - Mo - Mobar = Mostar + phipi * (ppi - pibar) + phiy * (y - ybar)
+    - Mohat - Mohatbar = Mostar + phipi * (pihat - pihatbar) + phiy * (yhat - yhatbar)
 
     # Value functions
-    - v = (1.0-gamma) * v(-1) + gamma * (y(-1) - xi(-1) + (1/sigma) * ppi(-1))
-    - vtilde = (1- gammatilde) * vtilde(-1) + gammatilde * ppi(-1) / (1 - alpha)
+    - v = (1.0-gamma) * v(-1) + gamma * (yhat(-1) - xi(-1) + (1/sigma) * pihat(-1))
+    - vtilde = (1- gammatilde) * vtilde(-1) + gammatilde * pihat(-1) / (1 - alpha)
 
     # Latent States
-    - ybar = rho * ybar - (1/sigma) * (ibar - rho*pibar) + (1-rho) * v
-    - pibar = beta*rho*pibar + kappa*ybar + (1-alpha)*beta*(1-rho)*vtilde
+    - yhatbar = rho * yhatbar - (1/sigma) * (ibar - rho*pihatbar) + (1-rho) * v
+    - pihatbar = beta*rho*pihatbar + kappa*yhatbar + (1-alpha)*beta*(1-rho)*vtilde
 
-    - mbar = (sigma/b) * ybar - (1/b) * ibar
-    - Mobar = mbar + pibar
-    - Mobar = phipiLR * pibar + phiyLR*ybar
-    - ylag = y(-1)
+    - mbar = (sigma/b) * yhatbar - (1/b) * ibar
+    - Mohatbar = mbar + pihatbar
+    - Mohatbar = phipiLR * pihatbar + phiyLR*yhatbar
+    # - ylag = yhat(-1)
     - xi = rhoxi * xi(-1) + epsxi
     - Mostar = rhoMo * Mostar(-1) + epsMo
     - ystar = rhoy * ystar(-1) + epsy
 
   observables:
-    ygr: yQ + (y/ylag - 1) * 100
-    infl: piA + 4.0 * ppi
-    int: piA + 4.0 * Mo
-    # ygr: ygr
-    # infl: infl
-    # int: int
+    ygr: yhat
+    infl: pihat
+    int: Mohat
+    # ygr: yQ + (y/ylag - 1) * 100
+    # infl: piA + 4.0 * ppi
+    # int: piA + 4.0 * Mo
+    
 
 calibration:
   parameters:
     sigma: 1.52
     b: 2.39
-    piA: 2
-    yQ: 0.5
+    # piA: 2
+    # yQ: 0.5
     beta: 0.96
     kappa: 0.124
     alpha: 0.19
@@ -110,29 +111,6 @@ calibration:
     phipiLR: -1.24
     phiyLR: -2.23
 
-  # edvard
-  # parameters:
-  #   sigma: 1.0
-  #   beta: 0.13
-  #   kappa: 0.01
-  #   alpha: 0.75
-  #   rho: 1.0
-  #   phipi: 1.5
-  #   phiy: 0.25
-  #   gamma: 0.1
-  #   gammatilde: 0.1
-  #   sigxi: 1.0
-  #   sigy: 1.0
-  #   sigi: 1.0
-  #   rhoxi: 0.85
-  #   rhoy: 0.85
-  #   rhoi: 0.85
-  #   rA: 2
-  #   piA: 2
-  #   yQ: 0.5
-  #   phipiLR: 1.5
-  #   phiyLR: 0.25
-
   covariances:
     epsxi: sigxi^2
     epsy: sigy^2
@@ -143,46 +121,24 @@ estimation:
     file: "data/longsample_ir.txt"
     start: 1368Q1
 
-    prior:
-      alpha: [beta, 0.2, 0.02]
-      sigma: [gamma, 1.5, 0.05]
-      piA: [normal, 4, 1]
-      yQ: [normal, 0.5, 0.1]
-      rho: [uniform, 0, 1]
-      beta: [beta, 0.96, 0.05]
-      b: [gamma, 1.4, 0.05]
-      gamma: [uniform, 0, 1]
-      gammatilde: [uniform, 0, 1]
-      kappa: [gamma, 0.12, 0.07]
-      phipi: [normal, -1.24, 0.1]
-      phiy: [normal, -2.23, 0.1]
-      sigxi: [inv_gamma, 0.01, inf]
-      sigMo: [inv_gamma, 0.01, inf]
-      sigy: [inv_gamma, 0.01, inf]
-      rhoxi : [beta, 0.8, 0.05]
-      rhoy: [normal, 0.8, 0.05]
-      rhoMo: [beta, 0.78, 0.05]
-      phipiLR: [normal, -1.24, 0.1]
-      phiyLR: [normal, -2.23, 0.1]
-
-    #  edvard
-    # prior:
-    # alpha: [normal, 0.75, 0.05]
-    # sigma: [gamma, 2.0, 0.5]
-    # rA: [gamma, 2.00, 1.0]
+  prior:
+    alpha: [beta, 0.2, 0.02]
+    sigma: [gamma, 1.5, 0.05]
     # piA: [normal, 4, 1]
     # yQ: [normal, 0.5, 0.1]
-    # rho: [uniform, 0, 1]
-    # gamma: [uniform, 0, 1]
-    # gammatilde: [uniform, 0, 1]
-    # kappa: [gamma, 0.05, 0.1]
-    # phipi: [gamma, 1.50, 0.25]
-    # phiy: [gamma, 0.25, 0.25]
-    # sigxi: [inv_gamma, 1, 4]
-    # sigi: [inv_gamma, 1, 4]
-    # sigy: [inv_gamma, 1, 4]
-    # rhoxi: [uniform, 0, 1]
-    # rhoy: [uniform, 0, 1]
-    # rhoi: [uniform, 0, 1]
-    # phipiLR: [gamma, 1.50, 0.25]
-    # phiyLR: [gamma, 0.25, 0.25]
+    rho: [uniform, 0, 1]
+    beta: [beta, 0.96, 0.05]
+    b: [gamma, 1.4, 0.05]
+    gamma: [uniform, 0, 1]
+    gammatilde: [uniform, 0, 1]
+    kappa: [gamma, 0.12, 0.07]
+    phipi: [normal, -1.24, 0.1]
+    phiy: [normal, -2.23, 0.1]
+    sigxi: [inv_gamma, 0.01, inf]
+    sigMo: [inv_gamma, 0.01, inf]
+    sigy: [inv_gamma, 0.01, inf]
+    rhoxi: [beta, 0.8, 0.05]
+    rhoy: [normal, 0.8, 0.05]
+    rhoMo: [beta, 0.78, 0.05]
+    phipiLR: [normal, -1.24, 0.1]
+    phiyLR: [normal, -2.23, 0.1]
